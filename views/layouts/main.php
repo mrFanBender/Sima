@@ -26,7 +26,7 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'My Company',
+                'brandLabel' => 'Тестовое для Sima-land',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,13 +36,13 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     ['label' => 'Главная', 'url' => ['/site/index']],
-                    ['label' => 'О нас', 'url' => ['/site/about']],
-                    ['label' => 'Контакты', 'url' => ['/site/contact']],
                     Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['/site/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['label' => 'Вход', 'url' => ['/site/login']] :
+                        ['label' => 'Выход (' . Yii::$app->user->identity->username . ')',
                             'url' => ['/site/logout'],
                             'linkOptions' => ['data-method' => 'post']],
+                  Yii::$app->user->isGuest ?
+                     ['label' => 'Регистрация', 'url' => ['/site/registry']] : ''
                 ],
             ]);
             NavBar::end();

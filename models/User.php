@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-class User extends \yii\base\Object implements \yii\web\IdentityInterface
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     public $id;
     public $username;
@@ -32,7 +32,18 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        $user = User::find()->where(['id'=>$id])->asArray()->one();
+        if($user){
+            $our_user = 
+                [
+                    'id'=>$user['id'],
+                    'username' => $user['username'],
+                    'password'  =>  $user['password'],
+                    'authKey' => 'test'.$user['id'].'key',
+                    'accessToken' => $user['id'].'-token'
+                ];
+        }
+        return $user ? new static($our_user) : null;
     }
 
     /**
@@ -57,12 +68,25 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
+        /*foreach (self::$users as $user) {
             if (strcasecmp($user['username'], $username) === 0) {
                 return new static($user);
             }
+        }*/
+        $user = User::find()->where(['username'=>$username])->asArray()->one();
+        if($user){
+            $our_user = [$user['id'] =>
+                [
+                    'id'=>$user['id'],
+                    'username' => $user['username'],
+                    'password'  =>  $user['password'],
+                    'authKey' => 'test'.$user['id'].'key',
+                    'accessToken' => $user['id'].'-token'
+                ]
+            ];
+            //var_dump($user);
+            return new static($user);
         }
-
         return null;
     }
 

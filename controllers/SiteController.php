@@ -7,6 +7,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\RegistryForm;
+use app\models\UserDB;
 use app\models\ContactForm;
 use app\models\EntryForm;
 
@@ -51,9 +53,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $request = Yii::$app->request;
-        if(\Yii::$app->user->isGuest){
+        /*if(\Yii::$app->user->isGuest){
             $this->redirect('login', 301);
-        }
+        }*/
         return $this->render('index', ['request' => $request, 'obj'=>$this]);
     }
 
@@ -73,11 +75,35 @@ class SiteController extends Controller
         }
     }
 
+    public function actionCheckdb($username)
+    {
+        $userdb = UserDB::find()
+                ->where(['username'=>$username])
+                ->one();
+        var_dump($userdb);
+    }
+
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionRegistry()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new RegistryForm();
+        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+            return $this->goBack();
+        } else {
+            return $this->render('registry', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionContact()

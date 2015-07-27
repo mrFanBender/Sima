@@ -8,11 +8,10 @@ use yii\base\Model;
 /**
  * LoginForm is the model behind the login form.
  */
-class LoginForm extends Model
+class RegistryForm extends Model
 {
     public $username;
     public $password;
-    public $rememberMe = true;
 
     private $_user = false;
 
@@ -25,10 +24,8 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            //проверим, есть ли пользователь с таким именем
+            ['username', 'validateUsername'],
         ];
     }
 
@@ -39,12 +36,12 @@ class LoginForm extends Model
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
+    public function validateUsername($attribute, $params)
     {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Неверные имя пользователя или пароль');
+        echo 'lalala';
+        if(!$this->hasErrors()){
+            if(User::findByUsername($this->username)){
+                 $this->addError($attribute, 'Пользователь с таким именем уже существует');
             }
         }
     }
@@ -53,10 +50,23 @@ class LoginForm extends Model
      * Logs in a user using the provided username and password.
      * @return boolean whether the user is logged in successfully
      */
-    public function login()
+    public function register()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $user = new User();
+            $user->username = $this->username;
+            $user->password = $this->password;
+            var_dump($user->username);
+            var_dump($user->password);
+            $result = Yii::$app->db->createCommand()
+                        ->insert('user', array('username'=>$this->username, 'password'=>$this->password))
+                        ->query();
+            if($result){
+                return Yii::$app->user->login($this->getUser(), 3600*24*30);    
+            }
+            else{
+                return false;
+            }
         } else {
             return false;
         }
