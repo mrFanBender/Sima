@@ -110,7 +110,7 @@ class SiteController extends Controller
 
             if ($model->file && $model->validate()) { 
                 $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                ImageManager::saveImage(Yii::$app->homeUrl.'uploads/' . $model->file->baseName . '.' . $model->file->extension);
+                ImageManager::saveImage('uploads/' . $model->file->baseName . '.' . $model->file->extension);
             }
         }
         $this->redirect(Yii::$app->homeUrl.'site/index', TRUE, 301);

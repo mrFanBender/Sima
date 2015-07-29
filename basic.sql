@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Июл 29 2015 г., 06:36
+-- Время создания: Июл 29 2015 г., 06:43
 -- Версия сервера: 5.6.15-log
 -- Версия PHP: 5.5.8
 
@@ -37,12 +37,12 @@ CREATE TABLE IF NOT EXISTS `images` (
 --
 
 INSERT INTO `images` (`id`, `src`) VALUES
-(1, '/sima/web/uploads/8363737128_b76782c7a2_b.jpg'),
-(5, '/sima/web/uploads/16981606012_bb4cc962c9_b.jpg'),
-(13, '/sima/web/uploads/18984154033_633c3b708a_b.jpg'),
-(21, '/sima/web/uploads/BC0153244396B0CD1A4F6EF48431D489_1920x1080.jpg'),
-(23, '/sima/web/uploads/18978168593_7df261af58_b.jpg'),
-(22, '/sima/web/uploads/16023192786_e3c717597c_b.jpg');
+(1, '/uploads/8363737128_b76782c7a2_b.jpg'),
+(5, '/uploads/16981606012_bb4cc962c9_b.jpg'),
+(13, '/uploads/18984154033_633c3b708a_b.jpg'),
+(21, '/uploads/BC0153244396B0CD1A4F6EF48431D489_1920x1080.jpg'),
+(23, '/uploads/18978168593_7df261af58_b.jpg'),
+(22, '/uploads/16023192786_e3c717597c_b.jpg');
 
 -- --------------------------------------------------------
 

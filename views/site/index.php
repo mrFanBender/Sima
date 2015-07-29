@@ -20,7 +20,7 @@ $this->title = 'Тестовое задание для Сима-лэнд';
     <div class="image-list-box">
         <?php foreach($images as $image){ ?>
             <div class="image-box">
-                <img class="img img-responsive pull-left" src="<?= $image['src'] ?>">
+                <img class="img img-responsive pull-left" src="<?= Yii::$app->homeUrl.$image['src'] ?>">
                 <?php if(!Yii::$app->user->isGuest){ ?>
                      <a href="<?= !$image['ilike'] ? Yii::$app->homeUrl.'site/like?image_id='.$image['id'] : ''; ?>"><span class="glyphicon glyphicon-heart pull-left <?= $image['ilike'] ? 'red' : ''?>" imageid="<?= $image['id'] ?>"></span></a>
                 <?php } ?>
