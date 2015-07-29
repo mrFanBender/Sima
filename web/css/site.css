@@ -89,3 +89,32 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+.image-list-box{
+	display: block;
+	float: left;
+	width: 100%;
+}
+.image-box{
+	width: 80%;
+	display: block;
+	float: left;
+	margin: 10px 10% 20px;
+}
+.image-box>img{
+	display: block;
+	width: 100%;
+	float: left;
+	margin-bottom: 10px;
+}
+.userslikes-list{
+	display: block;
+	float: left;
+	list-style-type: none;
+}
+.userslikes-list>li{
+	float: left;
+}
+.red{
+	color: red;
+}

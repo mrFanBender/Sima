@@ -42,7 +42,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' =>  [],
+            'rules' =>  ['site/like/<image_id: \d+>'=>'site/like'],
         ],
     ],
     'params' => $params,

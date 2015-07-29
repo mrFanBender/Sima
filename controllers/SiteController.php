@@ -8,9 +8,12 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegistryForm;
-use app\models\UserDB;
+use app\models\UploadForm;
+use app\models\ImageManager;
 use app\models\ContactForm;
 use app\models\EntryForm;
+use yii\web\UploadedFile;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -52,11 +55,11 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $request = Yii::$app->request;
-        /*if(\Yii::$app->user->isGuest){
-            $this->redirect('login', 301);
-        }*/
-        return $this->render('index', ['request' => $request, 'obj'=>$this]);
+        $model = new UploadForm();
+        $imagemanager = new ImageManager();
+        $images = $imagemanager->getImages();
+
+        return $this->render('index', ['model'=>$model, 'images'=>$images]);
     }
 
     public function actionLogin()
@@ -73,14 +76,6 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }
-
-    public function actionCheckdb($username)
-    {
-        $userdb = UserDB::find()
-                ->where(['username'=>$username])
-                ->one();
-        var_dump($userdb);
     }
 
     public function actionLogout()
@@ -106,38 +101,26 @@ class SiteController extends Controller
         }
     }
 
-    public function actionContact()
+  public function actionUpload()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $model = new UploadForm();
 
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            if ($model->file && $model->validate()) { 
+                $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+                ImageManager::saveImage(Yii::$app->homeUrl.'uploads/' . $model->file->baseName . '.' . $model->file->extension);
+            }
         }
+        $this->redirect(Yii::$app->homeUrl.'site/index', TRUE, 301);
     }
 
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
-    public function actionEntry()
-    {
-         $model = new EntryForm;
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // данные в $model удачно проверены
-
-            // делаем что-то полезное с $model ...
- 
-            return $this->render('entry-confirm', ['model' => $model, 'yii_arr'=>Yii::$app->db]);
-        } else {
-            // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('entry', ['model' => $model]);
+    public function actionLike($image_id){
+        if(!Yii::$app->user->isGuest){
+            ImageManager::setLike($image_id);
         }
+        $this->redirect(Yii::$app->homeUrl.'site/index', true, 301);
     }
+
 }
