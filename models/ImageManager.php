@@ -19,7 +19,8 @@
 		public function refreshImages()
 		{
 
-			$this->images = Images::find()->all();
+			$this->images = Images::find()->orderby(['id'=>SORT_ASC])->all();
+			$this->images = array_reverse($this->images);
 			$this->getLikes();
 			return $this->images;
 		}
